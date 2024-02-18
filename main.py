@@ -57,7 +57,7 @@ while run:
     #--------------Draws-------------------------
     grid.draw(screen, params['wallColorGrid'], 0, int(params['sizeY'])-(int(params['tilesize'])*grid.dy))
     player.draw(screen, 0, int(params['sizeY'])-(int(params['tilesize'])*grid.dy), int(params['tilesize']))
-    player.drawSight(screen, 0, int(params['sizeY'])-(int(params['tilesize'])*grid.dy), int(params['tilesize']))
+    # player.drawSight(screen, 0, int(params['sizeY'])-(int(params['tilesize'])*grid.dy), int(params['tilesize']))
     player.drawRaycasts(screen, params['rayCastColor'], 0, int(params['sizeY'])-(int(params['tilesize'])*grid.dy), int(params['tilesize']), grid, int(params['resX']))
     dt = clock.tick(fps)
     pygame.display.flip()

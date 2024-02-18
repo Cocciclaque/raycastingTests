@@ -24,3 +24,5 @@ class Grid:
         except:
             pass
         return False
+    
+    

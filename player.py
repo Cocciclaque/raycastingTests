@@ -22,26 +22,47 @@ class Player:
                           origin[1]+(tilesize*3*math.cos(math.radians(self.a)))), 2)
 
     def drawRaycasts(self, screen:pygame.display, color:pygame.Color, posX:int, posY:int, tilesize:int, grid:Grid, screenSize:int):
-        baseOffsetCos = math.cos(self.a+self.fov)
-        baseOffsetSin = math.sin(self.a+self.fov)
-        raypos=[self.x, self.y]
         for i in range(screenSize):
             self.drawRay(screen, color, posX, posY, tilesize, (self.fov/screenSize)*i, grid)
-            
-            # OffsetCos = baseOffsetCos+math.cos(self.fov)
-            # pygame.draw.line(screen, color, (float(self.y*tilesize+posX), float(self.x*tilesize+posY)), 
-            #                  (float(self.y*tilesize+posX+(tilesize*6*baseOffsetSin)), 
-            #                   float(self.x*tilesize+posY+(tilesize*6*baseOffsetCos))),1)
                               
     def drawRay(self, screen:pygame.display, color:pygame.color, posX:int, posY:int, tilesize:int, angle:int, grid:Grid):
-        
-        pygame.draw.line(screen, color,(float(self.y*tilesize+posX), float(self.x*tilesize+posY)),
-                          (float(self.y*tilesize+posX+(tilesize*6*
-                                math.sin(math.radians(self.a+angle-(self.fov/2)))
-                                )), 
-                        float(self.x*tilesize+posY+(tilesize*6*
-                                math.cos(math.radians(self.a+angle-(self.fov/2)))
-                                ))))
-        
+
+        origin = (float(self.y*tilesize+posX), float(self.x*tilesize+posY))
+        angleCast = self.a+angle-(self.fov/2)
+        distance = self.getRayDistanceFromWall(angleCast, grid)
+        pygame.draw.line(screen, color,origin,
+                          (origin[0]+(tilesize*1*
+                                math.sin(math.radians(angleCast))*distance
+                                ), 
+                        origin[1]+(tilesize*1*
+                                math.cos(math.radians(angleCast))*distance
+                                )))
+
+    def getRayDistanceFromWall(self, angle, grid):
+        origin = [self.x, self.y]
+        dzs = [0, 0]
+
+        colliding = True
+        distance = 0
+
+        while colliding:
+            distance+=0.01
+            dzs[0] += math.cos(math.radians(angle))*0.01
+            dzs[1] += math.sin(math.radians(angle))*0.01
+            if grid.isColliding([math.floor(origin[0]+dzs[0]), math.floor(origin[1]+dzs[1])]):
+                colliding = False
+        colliding = True
+
+        while colliding:
+            distance += 1
+            origin[0] += dzs[0]
+            origin[1] += dzs[1]
+            if grid.isColliding([math.floor(origin[0]), math.floor(origin[1])]):
+                colliding = False
+        distance-=1
+        # return [math.floor(origin[0]+dzs[0]), math.floor(origin[1]+dzs[1])]
+        return distance
+       
+
     def getPos(self):
         return [math.floor(self.x), math.floor(self.y)]
