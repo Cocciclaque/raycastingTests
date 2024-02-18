@@ -11,6 +11,3 @@ def read(file):
         return_results.append(map)
 
     return return_results
-
-
-print(read("levels\laby-01.dat"))

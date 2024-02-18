@@ -25,4 +25,3 @@ class Grid:
             pass
         return False
     
-    

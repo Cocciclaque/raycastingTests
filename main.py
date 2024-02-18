@@ -6,6 +6,7 @@ from grid import Grid
 from player import Player
 from keyboard import Keyboard
 import math
+from drawer import Drawer
 pygame.init()
 
 #------------------Parameters---------------------
@@ -17,11 +18,13 @@ map = readDat.read(params["level"])
 run = True
 dt = 0
 fps = 144
+renderingDistance = 20
 clock = pygame.time.Clock()
 grid = Grid(params['tilesize'], map[0], map[1])
 screen = pygame.display.set_mode((int(params['sizeX']),int(params['sizeY'])))
+drawer = Drawer(screen, int(params['sizeX']), int(params['sizeY']), int(params['resX']), tuple(params['wallColor'].split(',')), tuple(params['wallColorFar'].split(',')))
 
-        #---------Player Variables----------------
+#---------Player Variables----------------
 pAxis = p1Axis = {'vertical':[0, [pygame.K_z, pygame.K_s]], 'horizontal':[0, [pygame.K_q, pygame.K_d]]}
 kb = Keyboard(pAxis)
 player = Player(params['playerColor'], [5, 2], 5, .02, 70)
@@ -55,10 +58,10 @@ while run:
     
     
     #--------------Draws-------------------------
-    grid.draw(screen, params['wallColorGrid'], 0, int(params['sizeY'])-(int(params['tilesize'])*grid.dy))
-    player.draw(screen, 0, int(params['sizeY'])-(int(params['tilesize'])*grid.dy), int(params['tilesize']))
     # player.drawSight(screen, 0, int(params['sizeY'])-(int(params['tilesize'])*grid.dy), int(params['tilesize']))
-    player.drawRaycasts(screen, params['rayCastColor'], 0, int(params['sizeY'])-(int(params['tilesize'])*grid.dy), int(params['tilesize']), grid, int(params['resX']))
+    player.drawRaycasts(screen, params['rayCastColor'], 0, int(params['sizeY'])-(int(params['tilesize'])*grid.dy), int(params['tilesize']), grid, int(params['resX']), drawer, renderingDistance)
+    player.draw(screen, 0, int(params['sizeY'])-(int(params['tilesize'])*grid.dy), int(params['tilesize']))
+    grid.draw(screen, params['wallColorGrid'], 0, int(params['sizeY'])-(int(params['tilesize'])*grid.dy))
     dt = clock.tick(fps)
     pygame.display.flip()
 pygame.quit()
