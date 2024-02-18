@@ -34,6 +34,7 @@ class Player:
             #                   float(self.x*tilesize+posY+(tilesize*6*baseOffsetCos))),1)
                               
     def drawRay(self, screen:pygame.display, color:pygame.color, posX:int, posY:int, tilesize:int, angle:int, grid:Grid):
+        
         pygame.draw.line(screen, color,(float(self.y*tilesize+posX), float(self.x*tilesize+posY)),
                           (float(self.y*tilesize+posX+(tilesize*6*
                                 math.sin(math.radians(self.a+angle-(self.fov/2)))
